@@ -1,6 +1,6 @@
+package src;
 public class App {
     public static void main(String[] args) {
-        Menu.populateCars();
-        Menu.run();
+        new Menu().run();
     }
 }
