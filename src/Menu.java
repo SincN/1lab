@@ -10,17 +10,24 @@ import java.util.Scanner;
 public class Menu {
     static Scanner scanner = new Scanner(System.in);
     static List<Car> cars = new ArrayList<>();
+    static List<String> errors = new ArrayList<>();
 
     private void populateCars() {
         try (BufferedReader reader = Files.newBufferedReader(Path.of("resources/cars.csv"))) {
             String line;
             reader.readLine(); // Skip header line
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(";");
-                cars.add(new Car(parts[0], parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3])));
+                try {
+                    String[] parts = line.split(";");
+                    cars.add(new Car(parts[0], parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3])));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    errors.add("Ошибка при чтении данных автомобиля: Недостаточно данных в строке '" + line + "'");
+                } catch (NumberFormatException e) {
+                    errors.add("Ошибка при чтении данных автомобиля: Неверный формат числа в строке '" + line + "'");
+                }
             }
         } catch (IOException e) {
-            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+            errors.add("Ошибка при чтении файла: " + e.getMessage());
         }
     }
 
@@ -35,7 +42,6 @@ public class Menu {
     private void clearScreen() {
         System.out.print("\033[3J\033[2J\033[H");
         System.out.flush();
-        System.out.println("\n========================================");
     }
 
     private void backToMenu() {
@@ -53,10 +59,18 @@ public class Menu {
     }
 
     private void printMenu() {
+        if (!errors.isEmpty()) {
+            System.out.println("Ошибки при выполнении программы, данные могут быть неполными:");
+            for (String error : errors) {
+                System.out.println(" - " + error);
+            }
+        }
+        System.out.println("\n========================================");
         System.out.println("Меню:");
         System.out.println("1. Показать список автомобилей");
         System.out.println("2. Добавить автомобиль");
         System.out.println("0. Выход");
+        System.out.println("========================================\n");
         System.out.print("Выберите команду: ");
     }
 
