@@ -1,5 +1,3 @@
-package src;
-
 public class Car {
     private final String manufacturer;
     private final String model;

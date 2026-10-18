@@ -1,4 +1,3 @@
-package src;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -71,6 +70,7 @@ public class Menu {
         System.out.println("Меню:");
         System.out.println("1. Показать список автомобилей");
         System.out.println("2. Добавить автомобиль");
+        System.out.println("3. Обновить список автомобилей (считать из файла)");
         System.out.println("0. Выход");
         System.out.println("========================================\n");
         System.out.print("Выберите команду: ");
@@ -116,6 +116,7 @@ public class Menu {
             switch (choice) {
                 case "1" -> printCarList();
                 case "2" -> addCar();
+                case "3" -> populateCars();
                 case "0" -> {
                     return;
                 }
