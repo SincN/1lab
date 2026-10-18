@@ -2,14 +2,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
     private final Scanner scanner = new Scanner(System.in);
-    private final List<Car> cars = new ArrayList<>();
-    private final List<String> errors = new ArrayList<>();
+    private final List<Car> cars = new CustomArrayList<>();
+    private final List<String> errors = new CustomArrayList<>();
 
     private void populateCars() {
         cars.clear();
@@ -55,6 +54,7 @@ public class Menu {
     private void printCarList() {
         System.out.println("Список автомобилей:");
         for (Car car : cars) {
+            System.out.println("Индекс: " + cars.indexOf(car));
             System.out.println(car.toString());
             System.out.println("--------------------");
         }
