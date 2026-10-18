@@ -25,6 +25,9 @@ public class Menu {
                     errors.add("Ошибка при чтении данных автомобиля: Неверный формат числа в строке '" + line + "'");
                 } catch (IllegalArgumentException e) {
                     errors.add("Ошибка при чтении данных автомобиля: " + e.getMessage() + " в строке '" + line + "'");
+                } finally {
+                    // Добавляем null в список, чтобы сохранить индексы как в файле, даже если произошла ошибка
+                    cars.add(null);
                 }
             }
         } catch (IOException e) {
