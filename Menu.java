@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    static Scanner scanner = new Scanner(System.in);
-    static List<Car> cars = new ArrayList<>();
-    static List<String> errors = new ArrayList<>();
+    Scanner scanner = new Scanner(System.in);
+    List<Car> cars = new ArrayList<>();
+    List<String> errors = new ArrayList<>();
 
     private void populateCars() {
         cars.clear();
         try (BufferedReader reader = Files.newBufferedReader(Path.of("resources/cars.csv"))) {
             String line;
-            reader.readLine(); // Skip header line
+            reader.readLine();
             while ((line = reader.readLine()) != null) {
                 try {
                     String[] parts = line.split(";");
@@ -37,13 +37,14 @@ public class Menu {
         try (var writer = Files.newBufferedWriter(Path.of("resources/cars.csv"), java.nio.file.StandardOpenOption.APPEND)) {
                 writer.write(String.format("\n%s;%s;%d;%d", car.getManufacturer(), car.getModel(), car.getYear(), car.getPower()));
         } catch (IOException e) {
-            System.err.println("Ошибка при записи в файл: " + e.getMessage());
+            errors.add("Ошибка при записи в файл: " + e.getMessage());
         }
     }
 
     private void clearScreen() {
         System.out.print("\033[3J\033[2J\033[H");
         System.out.flush();
+        
     }
 
     private void backToMenu() {
@@ -88,13 +89,6 @@ public class Menu {
         System.out.print("Введите мощность (л.с.): ");
         String power = scanner.nextLine();
         int yearInt, powerInt;
-        
-        try {
-        } catch (NumberFormatException e) {
-            System.err.println("Год выпуска и мощность должны быть числами. Попробуйте снова.");
-            backToMenu();
-            return;
-        }
 
         try {
             yearInt = Integer.parseInt(year);
@@ -104,7 +98,7 @@ public class Menu {
             writeCarToFile(newCar);
             System.out.println("Автомобиль успешно добавлен!");
         } catch (IllegalArgumentException e) {
-            System.err.println("Ошибка при добавлении автомобиля: " + e.getMessage());
+            errors.add("Ошибка при добавлении автомобиля: " + e.getMessage());
         }
         backToMenu();
     }
@@ -117,8 +111,9 @@ public class Menu {
                 .filter(car -> car.getManufacturer().equalsIgnoreCase(manufacturer))
                 .sorted((car1, car2) -> Integer.compare(car1.getYear(), car2.getYear()))
                 .forEach(car -> {
-                    System.out.println(car.toString());
-                    System.out.println("--------------------");
+                        System.out.println(car.toString());
+                        System.out.println("--------------------");
+                        
                 });
         backToMenu();
     }
@@ -128,6 +123,7 @@ public class Menu {
         while (true) {
             clearScreen();
             printMenu();
+            errors.clear();
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1" -> printCarList();
@@ -137,9 +133,8 @@ public class Menu {
                 case "0" -> {
                     return;
                 }
-                default -> System.out.println("Выбрана несуществующая команда. Попробуйте снова.");
+                default -> errors.add("Выбрана несуществующая команда. Попробуйте снова.");
             }
-
         }
     }
 }
