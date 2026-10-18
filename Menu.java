@@ -131,6 +131,7 @@ public class Menu {
         System.out.print("Введите производителя для фильтрации: ");
         String manufacturer = scanner.nextLine();
         List<String> filterResult = cars.stream()
+                .filter(car -> car != null)
                 .filter(car -> car.getManufacturer().equalsIgnoreCase(manufacturer))
                 .sorted((car1, car2) -> Integer.compare(car1.getYear(), car2.getYear()))
                 .map(car -> {
