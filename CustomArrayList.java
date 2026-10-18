@@ -13,7 +13,7 @@ public class CustomArrayList<T> extends AbstractList<T> {
     private void checkIndex(int index) {
         // Проверка индекса
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index " + index + " higher than size " + size);
+            throw new IndexOutOfBoundsException("Индекс " + index + " вне границ размера списка " + size);
         }
     }
 

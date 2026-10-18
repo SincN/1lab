@@ -40,6 +40,20 @@ public class Menu {
         }
     }
 
+    private void removeCarFromFile(int index) {
+        try {
+            List<String> lines = Files.readAllLines(Path.of("resources/cars.csv"));
+            if (index < 0 || index >= lines.size() - 1) {
+                errors.add("Ошибка при удалении автомобиля: Индекс " + index + " выше размера списка " + (lines.size() - 1));
+                return;
+            }
+            lines.remove(index + 1);
+            Files.write(Path.of("resources/cars.csv"), lines);
+        } catch (IOException e) {
+            errors.add("Ошибка при удалении автомобиля из файла: " + e.getMessage());
+        }
+    }
+
     private void clearScreen() {
         System.out.print("\033[3J\033[2J\033[H");
         System.out.flush();
@@ -74,6 +88,8 @@ public class Menu {
         System.out.println("2. Добавить автомобиль");
         System.out.println("3. Обновить список автомобилей (считать из файла)");
         System.out.println("4. Фильтровать автомобили по производителю");
+        System.out.println("5. Удалить автомобиль по индексу");
+        System.out.println("6. Прочитать автомобиль по индексу");
         System.out.println("0. Выход");
         System.out.println("========================================\n");
         System.out.print("Выберите команду: ");
@@ -124,6 +140,37 @@ public class Menu {
         backToMenu();
     }
 
+    private void removeCar() {
+        System.out.print("Введите индекс автомобиля для удаления: ");
+        String indexStr = scanner.nextLine();
+        try {
+            int index = Integer.parseInt(indexStr);
+            Car removedCar = cars.remove(index);
+            removeCarFromFile(index);
+            System.out.println("Автомобиль успешно удален: " + removedCar);
+        } catch (NumberFormatException e) {
+            errors.add("Ошибка при удалении автомобиля: Индекс должен быть числом");
+        } catch (IndexOutOfBoundsException e) {
+            errors.add("Ошибка при удалении автомобиля: " + e.getMessage());
+        }
+    }
+
+    private void readCarByIndex() {
+        System.out.print("Введите индекс автомобиля для чтения: ");
+        String indexStr = scanner.nextLine();
+        try {
+            int index = Integer.parseInt(indexStr);
+            Car car = cars.get(index);
+            System.out.println("Автомобиль по индексу " + index + ":");
+            System.out.println(car.toString());
+            backToMenu();
+        } catch (NumberFormatException e) {
+            errors.add("Ошибка при чтении автомобиля: Индекс должен быть числом");
+        } catch (IndexOutOfBoundsException e) {
+            errors.add("Ошибка при чтении автомобиля: " + e.getMessage());
+        }
+    }
+
     public void run() {
         populateCars();
         while (true) {
@@ -136,6 +183,8 @@ public class Menu {
                 case "2" -> addCar();
                 case "3" -> populateCars();
                 case "4" -> filterManufacturerCars();
+                case "5" -> removeCar();
+                case "6" -> readCarByIndex();
                 case "0" -> {
                     return;
                 }
