@@ -108,19 +108,18 @@ public class Menu {
     private void filterManufacturerCars() {
         System.out.print("Введите производителя для фильтрации: ");
         String manufacturer = scanner.nextLine();
-        List<Car> filteredCars = cars.stream()
+        List<String> filterResult = cars.stream()
                 .filter(car -> car.getManufacturer().equalsIgnoreCase(manufacturer))
                 .sorted((car1, car2) -> Integer.compare(car1.getYear(), car2.getYear()))
                 .map(car -> {
-                        System.out.println(car.toString());
-                        System.out.println("--------------------");
-                        return car;
+                        return car.toString() + "\n--------------------";
                 })
                 .toList();
-        if (filteredCars.isEmpty()) {
+        if (filterResult.isEmpty()) {
             System.out.println("Автомобили не найдены.");
         } else {
             System.out.println("Список автомобилей " + manufacturer + " (по году):");
+            filterResult.forEach(System.out::println);
         }
         backToMenu();
     }
