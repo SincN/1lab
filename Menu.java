@@ -54,7 +54,7 @@ public class Menu {
                 return;
             }
             lines.remove(index + 1);
-            Files.write(Path.of("resources/cars.csv"), lines);
+            Files.writeString(Path.of("resources/cars.csv"), String.join("\n", lines));
         } catch (IOException e) {
             errors.add("Ошибка при удалении автомобиля из файла: " + e.getMessage());
         }
@@ -170,7 +170,10 @@ public class Menu {
             System.out.println("Автомобиль по индексу " + index + ":");
             System.out.println(car.toString());
             backToMenu();
-        } catch (NumberFormatException e) {
+        } catch (NullPointerException e) {
+            errors.add("Ошибка при чтении автомобиля: Автомобиль по индексу " + indexStr + " не существует или невалиден");
+        }
+        catch (NumberFormatException e) {
             errors.add("Ошибка при чтении автомобиля: Индекс должен быть числом");
         } catch (IndexOutOfBoundsException e) {
             errors.add("Ошибка при чтении автомобиля: " + e.getMessage());
