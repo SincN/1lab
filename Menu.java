@@ -21,11 +21,14 @@ public class Menu {
                     cars.add(new Car(parts[0], parts[1], Integer.parseInt(parts[2]), Integer.parseInt(parts[3])));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     errors.add("Ошибка при чтении данных автомобиля: Недостаточно данных в строке '" + line + "'");
+                    // Добавляем null в список, чтобы сохранить индексы как в файле, даже если произошла ошибка
+                    cars.add(null);
                 } catch (NumberFormatException e) {
                     errors.add("Ошибка при чтении данных автомобиля: Неверный формат числа в строке '" + line + "'");
+                    // Добавляем null в список, чтобы сохранить индексы как в файле, даже если произошла ошибка
+                    cars.add(null);
                 } catch (IllegalArgumentException e) {
                     errors.add("Ошибка при чтении данных автомобиля: " + e.getMessage() + " в строке '" + line + "'");
-                } finally {
                     // Добавляем null в список, чтобы сохранить индексы как в файле, даже если произошла ошибка
                     cars.add(null);
                 }
