@@ -70,7 +70,7 @@ public class Menu {
 
     private void printCarList() {
         System.out.println("Список автомобилей:");
-        for (Car car : cars) {
+        for (Car car : cars.stream().filter(car -> car != null).toList()) {
             System.out.println("Индекс: " + cars.indexOf(car));
             System.out.println(car.toString());
             System.out.println("--------------------");
