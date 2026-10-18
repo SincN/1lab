@@ -24,6 +24,8 @@ public class Menu {
                     errors.add("Ошибка при чтении данных автомобиля: Недостаточно данных в строке '" + line + "'");
                 } catch (NumberFormatException e) {
                     errors.add("Ошибка при чтении данных автомобиля: Неверный формат числа в строке '" + line + "'");
+                } catch (IllegalArgumentException e) {
+                    errors.add("Ошибка при чтении данных автомобиля: " + e.getMessage() + " в строке '" + line + "'");
                 }
             }
         } catch (IOException e) {
