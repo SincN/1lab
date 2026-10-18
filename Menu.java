@@ -12,6 +12,7 @@ public class Menu {
     static List<String> errors = new ArrayList<>();
 
     private void populateCars() {
+        cars.clear();
         try (BufferedReader reader = Files.newBufferedReader(Path.of("resources/cars.csv"))) {
             String line;
             reader.readLine(); // Skip header line
