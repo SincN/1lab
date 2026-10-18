@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    Scanner scanner = new Scanner(System.in);
-    List<Car> cars = new ArrayList<>();
-    List<String> errors = new ArrayList<>();
+    private final Scanner scanner = new Scanner(System.in);
+    private final List<Car> cars = new ArrayList<>();
+    private final List<String> errors = new ArrayList<>();
 
     private void populateCars() {
         cars.clear();
@@ -63,7 +63,7 @@ public class Menu {
 
     private void printMenu() {
         if (!errors.isEmpty()) {
-            System.out.println("Ошибки при выполнении программы, данные могут быть неполными:");
+            System.out.println("Ошибки:");
             for (String error : errors) {
                 System.out.println(" - " + error);
             }
@@ -97,24 +97,31 @@ public class Menu {
             cars.add(newCar);
             writeCarToFile(newCar);
             System.out.println("Автомобиль успешно добавлен!");
+            backToMenu();
+        } catch (NumberFormatException e) {
+            errors.add("Ошибка при добавлении автомобиля: Год выпуска и мощность должны быть числами");
         } catch (IllegalArgumentException e) {
             errors.add("Ошибка при добавлении автомобиля: " + e.getMessage());
         }
-        backToMenu();
     }
 
     private void filterManufacturerCars() {
         System.out.print("Введите производителя для фильтрации: ");
         String manufacturer = scanner.nextLine();
-        System.out.println("Список автомобилей " + manufacturer + " (по году):");
-        cars.stream()
+        List<Car> filteredCars = cars.stream()
                 .filter(car -> car.getManufacturer().equalsIgnoreCase(manufacturer))
                 .sorted((car1, car2) -> Integer.compare(car1.getYear(), car2.getYear()))
-                .forEach(car -> {
+                .map(car -> {
                         System.out.println(car.toString());
                         System.out.println("--------------------");
-                        
-                });
+                        return car;
+                })
+                .toList();
+        if (filteredCars.isEmpty()) {
+            System.out.println("Автомобили не найдены.");
+        } else {
+            System.out.println("Список автомобилей " + manufacturer + " (по году):");
+        }
         backToMenu();
     }
 
