@@ -71,7 +71,7 @@ public class Menu {
         System.out.println("1. Показать список автомобилей");
         System.out.println("2. Добавить автомобиль");
         System.out.println("3. Обновить список автомобилей (считать из файла)");
-        System.out.println("4. Автомобили Toyota (по году)");
+        System.out.println("4. Фильтровать автомобили по производителю");
         System.out.println("0. Выход");
         System.out.println("========================================\n");
         System.out.print("Выберите команду: ");
@@ -108,10 +108,12 @@ public class Menu {
         backToMenu();
     }
 
-    private void filterToyotaCars() {
-        System.out.println("Список автомобилей Toyota (по году):");
+    private void filterManufacturerCars() {
+        System.out.print("Введите производителя для фильтрации: ");
+        String manufacturer = scanner.nextLine();
+        System.out.println("Список автомобилей " + manufacturer + " (по году):");
         cars.stream()
-                .filter(car -> car.getManufacturer().equalsIgnoreCase("Toyota"))
+                .filter(car -> car.getManufacturer().equalsIgnoreCase(manufacturer))
                 .sorted((car1, car2) -> Integer.compare(car1.getYear(), car2.getYear()))
                 .forEach(car -> {
                     System.out.println(car.toString());
@@ -130,7 +132,7 @@ public class Menu {
                 case "1" -> printCarList();
                 case "2" -> addCar();
                 case "3" -> populateCars();
-                case "4" -> filterToyotaCars();
+                case "4" -> filterManufacturerCars();
                 case "0" -> {
                     return;
                 }
